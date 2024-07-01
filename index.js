@@ -36,6 +36,8 @@ app.get("*", function(req, res) {
   res.redirect("/404");
 });
 
+console.log(process.env.SECRET);
+
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}.`);
 });
