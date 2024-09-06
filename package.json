@@ -16,6 +16,9 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 0",
+    "dev": "nodemon index.js",
+    "lint": "eslint .",
+    "lintfix": "eslint --fix .",
     "start": "node index.js"
   },
   "keywords": [
@@ -27,5 +30,11 @@
     "cookie"
   ],
   "author": "ciremia",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "@eslint/js": "^9.9.1",
+    "eslint": "^9.9.1",
+    "globals": "^15.9.0",
+    "nodemon": "^3.1.4"
+  }
 }

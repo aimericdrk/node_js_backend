@@ -1,58 +1,61 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>Login</title>
-    <script src="script/jquery.js"></script>
-    <link rel="stylesheet" href="css/dark_mode.css" id="default_css">
-    <script src="js/import_css.js"></script>
-    <script src="js/login_register.js"></script>
-    <script src="template/import_navbar.js"></script>
-  </head>
-  <body>
-    <section id="login_page">
-        <h1>Se connecter</h1>
-        <div id="form" class="form">
-        <label for="email">Adresse mail :</label>
-        <input type="text" id="login_email" name="email" required>
 
-        <label for="password">Mot de passe :</label>
-        <input type="password" id="login_password" name="password" required>
-        <p id="login_check" style="color: #eee !important;" class="text--center"></p>
-        <a href="/" id="login_redirect"></a>
-        <button onclick="login()">Se connecter</button>
-        <button style="margin-left: 230px;" onclick="switch_to_register()">S'inscrire</button>
+<head>
+  <title>Login</title>
+  <script src="script/jquery.js"></script>
+  <link rel="stylesheet" href="css/dark_mode.css" id="default_css">
+  <script src="js/import_css.js"></script>
+  <script src="js/login_register.js"></script>
+  <script src="template/import_navbar.js"></script>
+</head>
 
-        </div>
-    </section>
-    <section id="register_page" style="display: none;">
-        <h1>S'inscrire</h1>
-        <div id="form" class="form">
-        <label for="username">nom d'utilisateur :</label>
-        <input type="text" id="register_username" name="username" required>
+<body>
+  <section id="login_page">
+    <h1>Se connecter</h1>
+    <div id="form" class="form">
+      <label for="login_email_or_username">Adresse mail ou nom d'utilisateur:</label>
+      <input type="text" id="login_email_or_username" name="login_email_or_username" required>
 
-        <!--  <label for="firstName">Prénom :</label>
+      <label for="password">Mot de passe :</label>
+      <input type="password" id="login_password" name="password" required>
+      <p id="login_check" style="color: #eee !important;" class="text--center"></p>
+      <a href="/" id="login_redirect"></a>
+      <button onclick="login()">Se connecter</button>
+      <button style="margin-left: 230px;" onclick="switch_to_register()">S'inscrire</button>
+
+    </div>
+  </section>
+  <section id="register_page" style="display: none;">
+    <h1>S'inscrire</h1>
+    <div id="form" class="form">
+      <label for="username">nom d'utilisateur :</label>
+      <input type="text" id="register_username" name="username" required>
+
+      <!--  <label for="firstName">Prénom :</label>
         <input type="text" id="register_firstName" name="firstName" required>
 
         <label for="lastName">Nom de famille :</label>
         <input type="text" id="register_lastName" name="lastName" required> -->
 
-        <label for="email">Adresse mail:</label>
-        <input type="text" id="register_email" name="email" required>
+      <label for="email">Adresse mail:</label>
+      <input type="text" id="register_email" name="email" required>
 
-        <!-- <label for="adress">Adresse :</label>
+      <!-- <label for="adress">Adresse :</label>
         <input type="text" id="register_adress" name="adress" required>
 
         <label for="phonenumber">Numéro de téléphone:</label>
         <input type="number" id="register_phonenumber" name="phonenumber" required> -->
-        
-        <label for="password">Mot de passe:</label>
-        <input type="password" id="register_password" name="password" required>
-        <p id="register_check" style="color: #eee !important;" class="text--center"></p>
-        <a href="/" id="register_redirect"></a>
-        <button onclick="register()">S'inscrire</button>
-        <button style="margin-left: 230px;" onclick="switch_to_login()">Se connecter</button>
 
-        </div>
-    </section>
-  </body>
+      <label for="password">Mot de passe:</label>
+      <input type="password" id="register_password" name="password" required>
+      <p id="register_check" style="color: #eee !important;" class="text--center"></p>
+      <a href="/" id="register_redirect"></a>
+      <button onclick="register()">S'inscrire</button>
+      <button style="margin-left: 230px;" onclick="switch_to_login()">Se connecter</button>
+
+    </div>
+  </section>
+</body>
+
 </html>

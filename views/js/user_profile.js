@@ -1,28 +1,25 @@
 
 
-$(document).ready(function() {
+$(document).ready(function () {
     $.ajax({
-        type: 'GET',
-        method: 'GET',
+        type: "GET",
+        method: "GET",
         url: "/user_profile_info_api",
-        headers: {
-            "token": document.cookie.substring(6)
-        },
         dataType: "json",
         contentType: "application/json; charset=utf-8",
         timeout: 2000,
     }).done((response) => {
-        newElement = '<ul>'
+        newElement = "<ul>";
         for (const [key, value] of Object.entries(response.data)) {
             newElement += `<li>
                 <label for="${key}">${key} :</label>
                 <span id="${key}">${value}</span>
-            </li>`
+            </li>`;
         }
-        newElement += '</ul>'
-        document.getElementById("infos").innerHTML = newElement
+        newElement += "</ul>";
+        document.getElementById("infos").innerHTML = newElement;
     }).fail((response) => {
-        console.log(response)
-        document.getElementById("infos").innerHTML = "une erreur est survenue lors de la récupération de vos données"
-    })
+        console.log(response);
+        document.getElementById("infos").innerHTML = "une erreur est survenue lors de la récupération de vos données";
+    });
 });
