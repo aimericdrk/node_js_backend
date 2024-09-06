@@ -1,16 +1,16 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
-const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
+const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
 
-userSchema = new Schema( {
-	unique_id: {
+userSchema = new Schema({
+    unique_id: {
         type: String,
         unique: true,
         trim: true
     },
     link_session_id: {
-        type: String,
+        type: Array,
     },
     email: {
         type: String,
@@ -19,16 +19,17 @@ userSchema = new Schema( {
         trim: true,
         required: [true, "email is required"],
         validate: {
-          validator: function (v) {
-            return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
-          },
-          message: '{VALUE} is not a valid email!'
+            validator: function (v) {
+                return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
+            },
+            message: "{VALUE} is not a valid email!"
         },
     },
     role: {
         type: String,
         enum: ["normal", "admin"],
-        required: [true, "Please specify user role"]
+        required: [true, "Please specify user role"],
+        default: "normal"
     },
     username: {
         type: String,
@@ -36,17 +37,23 @@ userSchema = new Schema( {
         maxlength: [100, "username can't be more than 100 characters"],
         required: [true, "username is required"],
     },
-//    phonenumber: {
-//        type: String,
-//        required: 'Your phone number is required',
-//    },
-//    adress: {
-//        type: String,
-//        required: 'Your adress is required',
-//    },
+    //    phonenumber: {
+    //        type: String,
+    //        required: 'Your phone number is required',
+    //    },
+    //    adress: {
+    //        type: String,
+    //        required: 'Your adress is required',
+    //    },
     password: {
         type: String,
-        required: 'Your password is required',
+        required: "Your password is required",
+        validate: {
+            validator: function (v) {
+                return /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.{8,})/.test(v);
+            },
+            message: "Password must contain at least 8 characters, including uppercase, lowercase letters and numbers"
+        },
         max: 100
     },
     oldPassword: {
@@ -55,83 +62,84 @@ userSchema = new Schema( {
         default: ""
 
     },
-//    firstName: {
-//        type: String,
-//        required: 'First Name is required',
-//        max: 100
-//    },
-//    lastName: {
-//        type: String,
-//        required: 'Last Name is required',
-//        max: 100
-//    },
+    //    firstName: {
+    //        type: String,
+    //        required: 'First Name is required',
+    //        max: 100
+    //    },
+    //    lastName: {
+    //        type: String,
+    //        required: 'Last Name is required',
+    //        max: 100
+    //    },
     creationIp: {
         type: String,
     },
-	LastModification: {
-		type: Date,
-		default: Date.now
-	},
+    LastModification: {
+        type: Date,
+        default: Date.now
+    },
     LastModificationIp: {
         type: String,
-		default: ""
+        default: ""
     },
-	createdAt: {
-		type: Date,
-		default: Date.now
-	}
+    createdAt: {
+        type: Date,
+        default: Date.now
+    }
 }),
 
-userSchema.pre('save',  function(next) {
-    const user = this;
+    userSchema.pre("save", function (next) {
+        const user = this;
 
-    if (!user.isModified('password')) return next();
+        user.unique_id = crypto.randomUUID();
+        user.LastModificationIp = user.creationIp;
 
-    bcrypt.genSalt(10, function(err, salt) {
-        if (err) return next(err);
+        if (!user.isModified("password")) return next();
 
-        bcrypt.hash(user.password, salt, function(err, hash) {
+        bcrypt.genSalt(10, function (err, salt) {
             if (err) return next(err);
 
-            user.password = hash;
-            next();
+            bcrypt.hash(user.password, salt, function (err, hash) {
+                if (err) return next(err);
+
+                user.password = hash;
+                next();
+            });
         });
     });
-});
 
-userSchema.methods.comparePassword = function(password) {
+userSchema.methods.comparePassword = function (password) {
     return bcrypt.compareSync(password, this.password);
 };
 
-userSchema.methods.generateJWT = function() {
+userSchema.methods.generateJWT = function () {
     return jwt.sign({
         email: this.email,
         username: this.username,
         role: this.role
-    }, process.env.JWT_SECRET, { expiresIn: '1h' });
+    }, process.env.JWT_SECRET, { expiresIn: "1h" });
 };
 
-userSchema.statics.emailExists = async function(email) {
+userSchema.statics.emailExists = async function (email) {
     try {
-        const user = await this.findOne({ email: email });
-        return user ? true : false;
+        const found = await this.findOne({ email: email });
+        return !!found;
     } catch (err) {
-        console.error("Error checking if user exists: ", err);
+        console.error(err);
         return true;
     }
 };
 
-userSchema.statics.usernameExists = async function(username) {
+userSchema.statics.usernameExists = async function (username) {
     try {
-        const user = await this.findOne({ username: username });
-        console.log("username is already taken");   
-        return user ? true : false;
+        return !!(await this.findOne({ username: username }));
     } catch (err) {
-        console.error("Error checking if user exists: ", err);
-       return true;
+        console.error(err);
+        return true;
     }
 };
 
-User = mongoose.model('User', userSchema);
+User = mongoose.model("User", userSchema);
 
 module.exports = User;
