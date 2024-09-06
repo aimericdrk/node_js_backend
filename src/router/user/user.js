@@ -44,7 +44,7 @@ exports.register = async (req, res) => {
                         link_session_id: sessionRegistered.signed_id
                     }
                 });
-                return return_signed_cookies(req, res, sessionRegistered, userRegistered);
+                return return_signed_cookies(req, res, sessionRegistered, userRegistered, "registration successful");
             });
         });
     } catch (err) {
@@ -91,7 +91,7 @@ exports.login = async (req, res) => {
                         link_session_id: newSession.signed_id
                     }
                 });
-                return return_signed_cookies(req, res, newSession, userToLogin);
+                return return_signed_cookies(req, res, newSession, userToLogin, "login successful");
             });
         });
     } catch (err) {
@@ -137,14 +137,14 @@ exports.deleteaccount = async (req, res) => {
 };
 
 
-async function return_signed_cookies(req, res, Session, User) {
+async function return_signed_cookies(req, res, Session, User, message = "successfully registered") {
     try {
         return api_formatter(
             req,
             res,
             200,
             "success",
-            "successfully registered",
+            message,
             null,
             null,
             jwt.sign({ session_id: Session.unique_session_id }, process.env.SECRET),

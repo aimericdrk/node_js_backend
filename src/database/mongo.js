@@ -6,7 +6,7 @@ const MongoDBURI = process.env.MONGO_URI || "mongodb://127.0.0.1:27017/mydb";
 mongoose.set("strictQuery", false);
 
 const mainDB = mongoose.createConnection(MongoDBURI, {
-    dbName: process.env.MONGO_MAIN_DB_NAME
+    dbName: process.env.DB_NAME
 });
 
 mainDB.on("error", (err) => {
@@ -17,4 +17,4 @@ mainDB.once("open", async () => {
     console.log("connexion avec la base de données établie");
 });
 
-exports.database = mainDB;
+module.exports = { mainDB };

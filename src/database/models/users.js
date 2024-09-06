@@ -1,9 +1,9 @@
+const { mainDB } = require("../mongo");
 const mongoose = require("mongoose");
-const Schema = mongoose.Schema;
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
-userSchema = new Schema({
+const userSchema = new mongoose.Schema({
     unique_id: {
         type: String,
         unique: true,
@@ -87,27 +87,27 @@ userSchema = new Schema({
         type: Date,
         default: Date.now
     }
-}),
+})
 
-    userSchema.pre("save", function (next) {
-        const user = this;
+userSchema.pre("save", function (next) {
+    const user = this;
 
-        user.unique_id = crypto.randomUUID();
-        user.LastModificationIp = user.creationIp;
+    user.unique_id = crypto.randomUUID();
+    user.LastModificationIp = user.creationIp;
 
-        if (!user.isModified("password")) return next();
+    if (!user.isModified("password")) return next();
 
-        bcrypt.genSalt(10, function (err, salt) {
+    bcrypt.genSalt(10, function (err, salt) {
+        if (err) return next(err);
+
+        bcrypt.hash(user.password, salt, function (err, hash) {
             if (err) return next(err);
 
-            bcrypt.hash(user.password, salt, function (err, hash) {
-                if (err) return next(err);
-
-                user.password = hash;
-                next();
-            });
+            user.password = hash;
+            next();
         });
     });
+});
 
 userSchema.methods.comparePassword = function (password) {
     return bcrypt.compareSync(password, this.password);
@@ -140,6 +140,6 @@ userSchema.statics.usernameExists = async function (username) {
     }
 };
 
-User = mongoose.model("User", userSchema);
+const User = mainDB.model("User", userSchema);
 
 module.exports = User;

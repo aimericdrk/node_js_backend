@@ -1,12 +1,12 @@
+const { mainDB } = require("../mongo");
 const mongoose = require("mongoose");
-const Schema = mongoose.Schema;
 
 var hour = 3600000;
 var day = hour * 24;
 var month = day * 30;
 
 
-sessionSchema = new Schema({
+sessionSchema = new mongoose.Schema({
     unique_session_id: {
         type: String,
         unique: true,
@@ -31,8 +31,8 @@ sessionSchema = new Schema({
         type: Date,
         default: Date.now
     }
-}),
+});
 
-    Session = mongoose.model("session", sessionSchema);
+const Session = mainDB.model("session", sessionSchema);
 
 module.exports = Session;

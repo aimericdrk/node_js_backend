@@ -69,8 +69,8 @@ function notLoggedIn() {
 function darkModeSwitch(document) {
     let htmlElem = `<li>
         ${document.cookie.includes("darkmode=true") ?
-            "<button onclick=\"switch_to_light_mode()\">passez en mode clair</button>" :
-            "<button onclick=\"switch_to_dark_mode()\">passez en mode sombre</button>"}
+        "<button onclick=\"switch_to_light_mode()\">passez en mode clair</button>" :
+        "<button onclick=\"switch_to_dark_mode()\">passez en mode sombre</button>"}
     </li>`;
     return htmlElem;
 }

@@ -52,8 +52,4 @@ async function verif_session_data(session, user, ip) {
         session.user_signed_id != user.unique_id);
 }
 
-function invalid_session(req, res) {
-    return sendApiData(req, res, 401, "invalidSession", "It appears that your session is invalid");
-}
-
 module.exports = checkAuthenticated;

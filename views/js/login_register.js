@@ -139,4 +139,4 @@ window.onload = function () {
         console.log("switch_to_register");
         switch_to_register();
     }
-}
+};
