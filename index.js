@@ -1,12 +1,17 @@
 const express = require("express");
 const path = require("path");
 const app = express();
-const cookieParser = require("cookie-parser");
+const cors = require("cors");
 require("dotenv").config();
 require("./src/database/mongo");
+const api_formatter = require("./src/middleware/api-formatter.js");
+
 
 const PORT = process.env.PORT || 3333;
 
+app.use(cors());
+app.use(express.json());
+app.use(express.urlencoded({limit: '5mb', extended: true}));
 
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
@@ -16,10 +21,6 @@ app.use((req, res, next) => {
     next();
 });
 
-app.use(cookieParser());
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-
 app.use(function (req, res, next) {
     res.setHeader("Access-Control-Allow-Origin", "*");
     res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS, PUT, PATCH, DELETE");
@@ -28,15 +29,11 @@ app.use(function (req, res, next) {
     next();
 });
 
-app.use(express.static(__dirname + "/views"));
-app.use(express.static(__dirname + "/public"));
-
 require("./src/router/user/user.query")(app);
 require("./src/router/api/api.query")(app);
-require("./src/views/views.query")(app);
 
 app.get("*", function (req, res) {
-    res.redirect("/404");
+    return api_formatter(req, res, 404, "notFound", "This endpoint isn't found");
 });
 
 app.listen(PORT, () => {
