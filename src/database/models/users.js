@@ -37,14 +37,10 @@ const userSchema = new mongoose.Schema({
         maxlength: [100, "username can't be more than 100 characters"],
         required: [true, "username is required"],
     },
-    //    phonenumber: {
-    //        type: String,
-    //        required: 'Your phone number is required',
-    //    },
-    //    adress: {
-    //        type: String,
-    //        required: 'Your adress is required',
-    //    },
+    profilePicture: {
+        type: String,
+        default: ""
+    },
     password: {
         type: String,
         required: "Your password is required",
@@ -62,16 +58,6 @@ const userSchema = new mongoose.Schema({
         default: ""
 
     },
-    //    firstName: {
-    //        type: String,
-    //        required: 'First Name is required',
-    //        max: 100
-    //    },
-    //    lastName: {
-    //        type: String,
-    //        required: 'Last Name is required',
-    //        max: 100
-    //    },
     creationIp: {
         type: String,
     },
@@ -86,6 +72,10 @@ const userSchema = new mongoose.Schema({
     createdAt: {
         type: Date,
         default: Date.now
+    },
+    accountType: {
+        type: String,
+        default: "default"
     }
 })
 
