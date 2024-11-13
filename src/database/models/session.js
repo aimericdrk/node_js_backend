@@ -12,6 +12,11 @@ sessionSchema = new mongoose.Schema({
         unique: true,
         trim: true
     },
+    session_type: {
+        type: String,
+        enum: ["default", "google"],
+        default: "default"
+    },
     signed_id: {
         type: String,
         lowercase: true,
